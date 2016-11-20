@@ -1,0 +1,10 @@
+{
+  "presets": ["es2015", {
+    "modules": "umd"
+  }],
+  "env": {
+    "production": {
+      "presets": ["babili"]
+    }
+  }
+}

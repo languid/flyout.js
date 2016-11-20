@@ -1,0 +1,35 @@
+{
+  "name": "flyout.js",
+  "version": "1.0.0",
+  "description": "A Flyout plugins",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babili ./src -d ./dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/languid/flyout.js.git"
+  },
+  "keywords": [
+    "jquery",
+    "javascript",
+    "vue"
+  ],
+  "author": "Yinxiong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/languid/flyout.js/issues"
+  },
+  "homepage": "https://github.com/languid/flyout.js#readme",
+  "dependencies": {
+    "helper.js": "^1.0.0",
+    "jquery": "^3.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-babili": "0.0.8",
+    "babel-preset-es2015": "^6.18.0",
+    "babili": "0.0.8"
+  }
+}
