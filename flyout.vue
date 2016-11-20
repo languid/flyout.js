@@ -6,7 +6,7 @@
 
 <script>
 
-    import Flyout from './src/Flyout';
+    import Flyout from './dist/flyout';
 
     export default {
         name: 'FlyoutComponent',
