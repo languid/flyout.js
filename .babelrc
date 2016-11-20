@@ -1,10 +1,6 @@
 {
-  "presets": ["es2015", {
-    "modules": "umd"
-  }],
-  "env": {
-    "production": {
-      "presets": ["babili"]
-    }
-  }
+  "presets": ["es2015", "stage-2"],
+  "plugins": [
+    "transform-runtime"
+  ]
 }
