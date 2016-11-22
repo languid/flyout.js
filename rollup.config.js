@@ -10,9 +10,16 @@ export default {
     dest: 'dist/flyout.js',
     format: 'umd',
     moduleName: 'Flyout',
-    plugins: [node(), babel({
-        exclude: [
-            ''
-        ]
-    })]
+    external: ['minivents', 'jquery', 'lodash'],
+    globals: {
+        minivents: 'Events',
+        jquery: '$',
+        lodash: '_'
+    },
+    plugins: [
+        node(),
+        babel({
+            exclude: 'node_modules/**'
+        })
+    ]
 };
