@@ -1,0 +1,21 @@
+$flyout-spacer: 15px !default;
+$flyout-box-bg-color: #fff !default;
+$flyout-box-color: #666 !default;
+$flyout-box-shadow: none !default;
+$flyout-box-hd-color: #fff !default;
+$flyout-box-hd-bg: #f8f8f8 !default;
+$flyout-box-arrow-border-color: rgba(166, 166, 166, 0.74) !default;
+$flyout-box-border-color: #f8f8f8 !default;
+$flyout-box-border: 1px solid $flyout-box-border-color !default;
+$flyout-box-radius: 0px !default;
+
+$flyout-confirm-bg-color: #f7f7f7 !default;
+$flyout-confirm-arrow-border-color: #efefef !default;
+
+$flyout-form-size: (
+  normal: 200px,
+  medium: 300px,
+  large: 400px,
+  xlarge: 500px,
+  xxlarge: 600px
+);

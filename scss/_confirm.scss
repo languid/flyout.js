@@ -1,0 +1,18 @@
+.flyout-confirm {
+  .text {
+    padding: .5rem 1rem;
+    margin-bottom: 0;
+    background: $flyout-confirm-bg-color;
+    text-align: center;
+  }
+  .buttons {
+    padding: .5rem;
+    text-align: center;
+    .btn {
+      margin-right: 5px;
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
+}

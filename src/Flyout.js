@@ -4,11 +4,10 @@
 
 import $ from 'jquery';
 import _ from 'lodash';
-import {delay, clickOtherPlace} from 'helper.js';
+import {delay, documentClick} from 'helper.js';
 import Events from 'minivents';
 
 const $window = $(window);
-const $document = $(document);
 const $body = $(document.body);
 
 /**
@@ -62,16 +61,17 @@ class Flyout {
 
         if (typeof element == 'string') {
             //use template
-            if (flyoutModel = Flyout.template[element]) {
+            flyoutModel = Flyout.template[element];
+            if (flyoutModel) {
                 element = $(flyoutModel.element);
-                options = Object.assign({}, flyoutModel.options, options);
+                this.setting = Object.assign({}, flyoutModel.options, options);
                 //create element
             } else {
-                element = $(element)
+                element = $(element);
             }
-            $body.append(element)
+            $body.append(element);
         } else {
-            element = $(element)
+            element = $(element);
         }
 
         if (element.attr('id') && !document.getElementById(element.attr('id'))) {
@@ -115,11 +115,11 @@ class Flyout {
 
         if (this.setting.stop) {
             this.element.click(function (e) {
-                e.stopPropagation()
-            })
+                e.stopPropagation();
+            });
         }
         if (this.setting.anchor) {
-            this._anchor = options.anchor;
+            this._anchor = this.setting.anchor;
         }
         this.element.addClass(this.setting.classStyle);
 
@@ -131,7 +131,7 @@ class Flyout {
 
         if (this.setting.arrow) {
             this._arrow = $('<span class="flyout-arrow"></span>');
-            this.element.append(this._arrow)
+            this.element.append(this._arrow);
         }
 
         this.emit('mounted');
@@ -139,11 +139,11 @@ class Flyout {
 
     arrow() {
         this._arrow = $('<span class="flyout-arrow"></span>');
-        this.element.append(this._arrow)
+        this.element.append(this._arrow);
     }
 
     show(anchor, placement, alignment, fixed) {
-        this._baseFlyoutShow(anchor, placement, alignment, !!fixed)
+        this._baseFlyoutShow(anchor, placement, alignment, !!fixed);
     }
 
     //隐藏当前flyout对象
@@ -176,12 +176,11 @@ class Flyout {
 
     //创建停留计时器
     _createStayTimer() {
-        var self = this;
         if (this.setting.stayTime) {
             this._clearStay();
             this._stayTimer = delay(() => {
-                this.hide()
-            }, this.setting.stayTime + this.setting.showDuration)
+                this.hide();
+            }, this.setting.stayTime + this.setting.showDuration);
         }
     }
 
@@ -200,7 +199,7 @@ class Flyout {
             this._unbindDocument();
             this._unbindDocument = null;
         } else if (!this._unbindDocument) {
-            this._unbindDocument = clickOtherPlace(this.element, () => {
+            this._unbindDocument = documentClick(this.element, () => {
                 if (this.setting.clickDocumentHide === true) {
                     this.hide();
                 } else if (typeof self.setting.clickDocumentHide == 'function') {
@@ -220,7 +219,7 @@ class Flyout {
 
     //恢复flyout的原始html，这将情况此操作前所有对flyout的修改
     recover() {
-        this.element.html(this._originalHTML)
+        this.element.html(this._originalHTML);
     }
 
     _arrowPostion() {
@@ -230,20 +229,20 @@ class Flyout {
             right: ''
         });
 
-        let pos = '';
+        let pos;
         switch (this._where.at) {
-            case 'top':
-                pos = 'bottom';
-                break;
-            case 'bottom':
-                pos = 'top';
-                break;
-            case 'left':
-                pos = 'right';
-                break;
-            case 'right':
-                pos = 'left';
-                break;
+        case 'top':
+            pos = 'bottom';
+            break;
+        case 'bottom':
+            pos = 'top';
+            break;
+        case 'left':
+            pos = 'right';
+            break;
+        case 'right':
+            pos = 'left';
+            break;
         }
 
         let offset = 0;
@@ -283,11 +282,10 @@ class Flyout {
         }
 
         if (!anchor) {
-            console.error('没有标记触发手柄');
             return;
         } else {
             if (this._currentAnchor && this._currentAnchor[0] == anchor[0]) {
-                sameAnchor = true
+                sameAnchor = true;
             }
             this._currentAnchor = anchor;
             this._currentPlacement = placement;
@@ -324,7 +322,7 @@ class Flyout {
                 .animate(this._endPosition, {
                     easing: this.setting.easing,
                     duration: this.setting.showDuration,
-                    complete: e => {
+                    complete: () => {
                         this._isHide = false;
                         this._documentBind();
                         this.emit('shown');
@@ -344,20 +342,20 @@ class Flyout {
         let _hidePosition = {opacity: 0};
         let hideOffset = this.setting.hideOffset;
         switch (this._where.at) {
-            case 'bottom':
-                _hidePosition.top = this.element.offset().top + hideOffset;
-                break;
-            case 'top':
-                _hidePosition.top = this.element.offset().top - hideOffset;
-                break;
-            case 'left':
-                _hidePosition.left = this.element.offset().left - hideOffset;
-                break;
-            case 'right':
-                _hidePosition.left = this.element.offset().left + hideOffset;
-                break;
-            default:
-                break;
+        case 'bottom':
+            _hidePosition.top = this.element.offset().top + hideOffset;
+            break;
+        case 'top':
+            _hidePosition.top = this.element.offset().top - hideOffset;
+            break;
+        case 'left':
+            _hidePosition.left = this.element.offset().left - hideOffset;
+            break;
+        case 'right':
+            _hidePosition.left = this.element.offset().left + hideOffset;
+            break;
+        default:
+            break;
         }
 
         if (immediately === true) {
@@ -381,7 +379,7 @@ class Flyout {
         this._isHide = true;
         this.emit('hidden');
         if (this.setting.destroy) {
-            this.destroy()
+            this.destroy();
         }
     }
 
@@ -392,7 +390,7 @@ class Flyout {
             if (flyout && currentId != id && !flyout._isHide && !flyout.alone) {
                 flyout.hide();
             }
-        })
+        });
     }
 
     //获取位置坐标
@@ -416,53 +414,42 @@ class Flyout {
         this._endPosition = {opacity: 1};
 
         switch (this._currentPlacement) {
-            case 'top':
-                this._where.at = "top";
-                if (!this._fitTop(anchor, element) && !fixed) {
-                    this._fitBottom(anchor, element);
-                    this._where.at = "bottom";
-                }
-                this._alignHorizontally(anchor, element);
-                break;
-            case 'bottom':
-                this._where.at = "bottom";
-                if (!this._fitBottom(anchor, element) && !fixed) {
-                    this._fitTop(anchor, element);
-                    this._where.at = "top"
-                }
-                this._alignHorizontally(anchor, element);
-                break;
-            case "left":
-                this._where.at = "left";
-                if (!this._fitLeft(anchor, element) && !fixed) {
-                    // Didn't fit, needs scrollbar
-                    this._fitRight(anchor, element);
-                    this._where.at = "right"
-                }
-                this._alignVertically(anchor, element);
-                break;
-            case "right":
-                this._where.at = "right";
-                if (!this._fitRight(anchor, element) && !fixed) {
-                    // Didn't fit, needs scrollbar
-                    this._fitLeft(anchor, element);
-                    this._where.at = "left";
-                }
-                this._alignVertically(anchor, element);
-                break;
-            case 'auto':
-                break;
-        }
-
-        switch (this._currentAlignment) {
-            case 'top':
-                break;
-            case 'bottom':
-                break;
-            case 'left':
-                break;
-            case 'right':
-                break;
+        case 'top':
+            this._where.at = 'top';
+            if (!this._fitTop(anchor, element) && !fixed) {
+                this._fitBottom(anchor, element);
+                this._where.at = 'bottom';
+            }
+            this._alignHorizontally(anchor, element);
+            break;
+        case 'bottom':
+            this._where.at = 'bottom';
+            if (!this._fitBottom(anchor, element) && !fixed) {
+                this._fitTop(anchor, element);
+                this._where.at = 'top';
+            }
+            this._alignHorizontally(anchor, element);
+            break;
+        case 'left':
+            this._where.at = 'left';
+            if (!this._fitLeft(anchor, element) && !fixed) {
+                // Didn't fit, needs scrollbar
+                this._fitRight(anchor, element);
+                this._where.at = 'right';
+            }
+            this._alignVertically(anchor, element);
+            break;
+        case 'right':
+            this._where.at = 'right';
+            if (!this._fitRight(anchor, element) && !fixed) {
+                // Didn't fit, needs scrollbar
+                this._fitLeft(anchor, element);
+                this._where.at = 'left';
+            }
+            this._alignVertically(anchor, element);
+            break;
+        case 'auto':
+            break;
         }
     }
 
@@ -497,7 +484,7 @@ class Flyout {
     //是否适合居左
     _fitAlignLeft(anchorDimension, flyoutDimension) {
         this._nextLeft = anchorDimension.left;
-        return anchorDimension.left + flyoutDimension.width < $window.width()
+        return anchorDimension.left + flyoutDimension.width < $window.width();
     }
 
     //是否适合居右
@@ -511,9 +498,9 @@ class Flyout {
         if (this._currentAlignment == 'center') {
             this._nextTop = anchorDimension.top + anchorDimension.height / 2 - flyoutDimension.height / 2;
         } else if (this._currentAlignment == 'top') {
-            this._nextTop = anchorDimension.top
+            this._nextTop = anchorDimension.top;
         } else if (this._currentAlignment == 'bottom') {
-            this._nextTop = anchorDimension.bottom - flyoutDimension.height
+            this._nextTop = anchorDimension.bottom - flyoutDimension.height;
         }
 
         this._startPosition.top = this._nextTop;
@@ -555,7 +542,7 @@ class Flyout {
             if (flyoutControl && $this.is(':visible')) {
                 flyoutControl.hide();
             }
-        })
+        });
     }
 
     static get template() {
@@ -563,7 +550,7 @@ class Flyout {
             base: {
                 element: '<div class="flyout box"><div class="mod"><div class="bd"></div><div class="ft"></div></div></div>'
             }
-        }
+        };
     }
 }
 

@@ -3,11 +3,12 @@
  */
 
 import $ from 'jquery';
+import {noop} from 'helper.js';
 import Flyout from './Flyout';
 
-export default function (anchor, ok = $.noop, html = '') {
+export default function (anchor, ok = noop, html = '') {
 
-	const tpl = `
+    const tpl = `
 		<div class="flyout-box flyout-confirm">
 			<p class="text"></p>
 			<div class="buttons">
@@ -16,33 +17,33 @@ export default function (anchor, ok = $.noop, html = '') {
 			</div>
 		</div>`;
 
-	const flyout = new Flyout(tpl, {
-		destroy: true,
-		events: {
-			mounted(){
-				this.element.on('click', 'button[role]', e=> {
-					let type = $(e.target).attr('role');
-					if (type == 'ok') {
-						ok.call(this);
-					}
-					this.hide();
-				});
-			}
-		}
-	});
+    const flyout = new Flyout(tpl, {
+        destroy: true,
+        events: {
+            mounted(){
+                this.element.on('click', 'button[role]', e => {
+                    let type = $(e.target).attr('role');
+                    if (type == 'ok') {
+                        ok.call(this);
+                    }
+                    this.hide();
+                });
+            }
+        }
+    });
 
-	const text = flyout.element.find('p.text');
+    const text = flyout.element.find('p.text');
 
-	if (html) {
-		text.css('width', 'auto').show().html(html);
-		if (flyout.element.outerWidth() > 300) {
-			text.width('250');
-		}
-	} else {
-		text.hide().html('');
-	}
+    if (html) {
+        text.css('width', 'auto').show().html(html);
+        if (flyout.element.outerWidth() > 300) {
+            text.width('250');
+        }
+    } else {
+        text.hide().html('');
+    }
 
-	flyout.show(anchor, 'top', 'center');
+    flyout.show(anchor, 'top', 'center');
 
-	return flyout
+    return flyout;
 }

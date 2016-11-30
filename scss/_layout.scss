@@ -1,0 +1,49 @@
+.flyout {
+  display: none;
+  position: absolute;
+  z-index: 1003;
+  &.show {
+    display: block;
+  }
+}
+
+.flyout-box {
+  border: $flyout-box-border;
+  box-sizing: border-box;
+  background: $flyout-box-bg-color;
+  box-shadow: $flyout-box-shadow;
+  border-radius: $flyout-box-radius;
+  color: $flyout-box-color;
+  .hd {
+    padding: $flyout-spacer $flyout-spacer 0;
+  }
+  .bd {
+    padding: $flyout-spacer;
+  }
+  .ft {
+    padding: 0 10px 15px;
+    text-align: right;
+  }
+  .close {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    color: #ccc
+  }
+}
+
+.flyout-form {
+  width: map-get($flyout-form-size, 'normal');
+  &.medium {
+    width: map-get($flyout-form-size, 'medium');
+  }
+  &.large {
+    width: map-get($flyout-form-size, 'large');
+  }
+  &.xlarge {
+    width: map-get($flyout-form-size, 'xlarge');
+  }
+  &.xxlarge {
+    width: map-get($flyout-form-size, 'xxlarge');
+  }
+}

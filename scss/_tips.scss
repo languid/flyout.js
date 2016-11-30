@@ -1,0 +1,24 @@
+//信息框
+.flyout-tips {
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  font-size: 12px;
+  border-radius: 3px;
+  color: #fff;
+  &.alert-success {
+    @include flyout-box-style(#32b932, darken(#32b932, 5%));
+  }
+  &.alert-info {
+    @include flyout-box-style(#389bf7, darken(#389bf7, 5%));
+  }
+  &.alert-warning {
+    @include flyout-box-style(#f0ad4e, darken(#f0ad4e, 5%));
+  }
+  &.alert-danger, &.alert-error {
+    @include flyout-box-style(#ed5858, darken(#ed5858, 5%));
+  }
+  &.alert-tips {
+    @include flyout-box-style(#fff1a4, darken(#fff1a4, 5%));
+    color: #666;
+  }
+}

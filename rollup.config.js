@@ -3,21 +3,20 @@
  */
 
 import babel from 'rollup-plugin-babel';
-import node from 'rollup-plugin-node-resolve';
 
 export default {
-    entry: './index.js',
-    dest: 'dist/flyout.js',
-    format: 'umd',
+    entry: 'index.js',
+    dest: 'build/flyout.js',
     moduleName: 'Flyout',
-    external: ['minivents', 'jquery', 'lodash'],
+    format: 'umd',
+    external: ['minivents', 'jquery', 'lodash', 'helper.js'],
     globals: {
         minivents: 'Events',
         jquery: '$',
-        lodash: '_'
+        lodash: '_',
+        'helper.js': 'helper'
     },
     plugins: [
-        node(),
         babel({
             exclude: 'node_modules/**'
         })
