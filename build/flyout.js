@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery'), require('lodash'), require('helper.js'), require('minivents')) :
-    typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'lodash', 'helper.js', 'minivents'], factory) :
-    (factory((global.Flyout = global.Flyout || {}),global.$,global._,global.helper,global.Events));
-}(this, (function (exports,$,_,helper_js,Events) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery'), require('helper.js'), require('lodash'), require('minivents')) :
+    typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'helper.js', 'lodash', 'minivents'], factory) :
+    (factory((global.Flyout = global.Flyout || {}),global.$,global.helper,global._,global.Events));
+}(this, (function (exports,$,helper_js,_,Events) { 'use strict';
 
 $ = 'default' in $ ? $['default'] : $;
 _ = 'default' in _ ? _['default'] : _;
@@ -731,9 +731,9 @@ var tips = function (anchor, html, options) {
  * Created by Yinxiong on 2016/11/20.
  */
 
-exports['default'] = Flyout;
 exports.confirm = confirm;
 exports.tips = tips;
+exports['default'] = Flyout;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
