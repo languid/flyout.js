@@ -1,8 +1,10 @@
 {
   "name": "flyout",
-  "version": "1.1.2",
+  "version": "1.1.4",
   "description": "A Flyout plugins",
   "main": "./build/flyout.js",
+  "jsnext:main": "index",
+  "module": "index",
   "scripts": {
     "prepublish": "uglifyjs build/flyout.js -c -m -o build/flyout.min.js",
     "build": "npm run test && rollup -c && build:sass",
