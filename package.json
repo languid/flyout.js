@@ -11,6 +11,15 @@
     "build:sass": "node-sass scss/flyout.scss build/flyout.css && node-sass scss/flyout.scss build/flyout.min.css --output-style compressed",
     "test": "eslint index.js src"
   },
+  "typings": "types/index.d.ts",
+  "files": [
+    "build/flyout.js",
+    "build/flyout.min.js",
+    "build/flyout.css",
+    "scss",
+    "src",
+    "types/index.d.ts"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/languid/flyout.js.git"
