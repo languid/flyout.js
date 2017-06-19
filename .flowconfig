@@ -6,6 +6,7 @@
 .*/vue/.*
 
 [include]
+src
 
 [libs]
 flow
