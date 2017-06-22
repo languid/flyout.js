@@ -630,20 +630,15 @@ var confirm = function (anchor) {
   var tpl = '<div class="flyout-box flyout-confirm"><p class="text"></p><div class="buttons"><button role="cancel" class="btn btn-sm btn-secondary">\u53D6\u6D88</button><button role="ok" class="btn btn-sm btn-primary">\u786E\u8BA4</button></div></div>';
 
   var flyout = new Flyout$1(tpl, {
-    destroy: true,
-    events: {
-      mounted: function mounted() {
-        var _this = this;
+    destroy: true
+  });
 
-        this.element.on('click', 'button[role]', function (e) {
-          var type = $(e.target).attr('role');
-          if (type === 'ok') {
-            ok.call(_this);
-          }
-          _this.hide();
-        });
-      }
+  flyout.element.on('click', 'button[role]', function (e) {
+    var type = $(e.target).attr('role');
+    if (type === 'ok') {
+      ok();
     }
+    flyout.hide();
   });
 
   var text = flyout.element.find('p.text');

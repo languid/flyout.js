@@ -11,18 +11,15 @@ export default function (anchor, ok: Function = noop, html: string = '') {
   const tpl = `<div class="flyout-box flyout-confirm"><p class="text"></p><div class="buttons"><button role="cancel" class="btn btn-sm btn-secondary">取消</button><button role="ok" class="btn btn-sm btn-primary">确认</button></div></div>`
 
   const flyout = new Flyout(tpl, {
-    destroy: true,
-    events: {
-      mounted () {
-        this.element.on('click', 'button[role]', e => {
-          const type = $(e.target).attr('role')
-          if (type === 'ok') {
-            ok.call(this)
-          }
-          this.hide()
-        })
-      }
+    destroy: true
+  })
+
+  flyout.element.on('click', 'button[role]', e => {
+    const type = $(e.target).attr('role')
+    if (type === 'ok') {
+      ok()
     }
+    flyout.hide()
   })
 
   const text = flyout.element.find('p.text')
