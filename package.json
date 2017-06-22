@@ -1,13 +1,13 @@
 {
   "name": "flyout",
-  "version": "1.4.0",
+  "version": "1.4.3",
   "description": "A Flyout plugins",
   "main": "./build/flyout.js",
   "jsnext:main": "index",
   "module": "index",
   "scripts": {
     "dev": "rollup -c -w",
-    "prepublish": "uglifyjs build/flyout.js -c -m -o build/flyout.min.js",
+    "prepublish": "rollup -c && uglifyjs build/flyout.js -c -m -o build/flyout.min.js",
     "build": "npm run test && rollup -c && build:sass",
     "build:sass": "node-sass scss/flyout.scss build/flyout.css && node-sass scss/flyout.scss build/flyout.min.css --output-style compressed",
     "test": "eslint index.js src"
@@ -54,10 +54,11 @@
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "^2.0.1",
     "flow-bin": "^0.48.0",
+    "fs.realpath": "^1.0.0",
     "helper.js": "^1.4.10",
     "jquery": "^3.1.1",
     "minivents": "^2.0.2",
-    "node-sass": "^3.13.0",
+    "node-sass": "^3.13.1",
     "rollup": "^0.36.4",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-uglify": "^2.0.1",

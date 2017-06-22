@@ -1,1 +1,635 @@
-!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e(require("jquery"),require("helper.js"),require("minivents")):"function"==typeof define&&define.amd?define(["jquery","helper.js","minivents"],e):t.Flyout=e(t.$,t.helper,t.Events)}(this,function(t,e,i){"use strict";function n(t){n.installed||(n.installed=!0,t.component("flyout",o))}function s(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}t="default"in t?t.default:t,i="default"in i?i.default:i;var o={name:"FlyoutComponent",template:'<div class="flyout"><slot></slot></div>',props:{options:Object,outside:{type:Boolean,default:!0}},data:function(){return{isShow:!1}},created:function(){this.flyout=null},mounted:function(){this.outside&&document.body.appendChild(this.$el)},destroyed:function(){document.body.removeChild(this.$el),this.flyout&&this.flyout.destroy()},methods:{show:function(t){var e=this,i=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"bottom",n=arguments.length>2&&void 0!==arguments[2]?arguments[2]:"left";return this.flyout||(this.flyout=new l(this.$el,Object.assign({},this.options,{events:{show:function(){e.$emit("show")},hide:function(){e.$emit("hide")},shown:function(){e.$emit("shown")},hidden:function(){e.$emit("hidden")},created:function(){e.$emit("created")},mounted:function(){e.$emit("mounted")}}}))),this.flyout.show(t,i,n),this},hide:function(){return this.flyout.hide(),this},position:function(){return this.flyout.position(),this}}},h=function(){function t(t,e){for(var i=0;i<e.length;i++){var n=e[i];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}return function(e,i,n){return i&&t(e.prototype,i),n&&t(e,n),e}}(),r=t(window),a=t(document.body),l=function(){function n(e,o){s(this,n),i(this),this._anchor=null,this._where={},this._isHide=!0,this._currentAnchor=null,this._currentAnchorBox={},this._unbindDocument=null,this.setting=Object.assign({destroy:!1,alone:!1,clickDocumentHide:!0,sameAnchorHide:!0,hideDirect:"default",stayTime:0,anchorStay:!1,hideOffset:10,showOffset:10,showDuration:150,easing:"swing",classStyle:"",alignment:"center",placement:"top",arrow:!0,stop:!1,events:{}},o);var h=void 0;if(this.emit("created"),"string"==typeof e?((h=n.template[e])?(e=t(h.element),this.setting=Object.assign({},h.options,o)):e=t(e),a.append(e)):e=t(e),e.attr("id")&&!document.getElementById(e.attr("id"))&&a.append(e),e.data("flyout"))return e.data("flyout");e.data("flyout",this),this.primaryId=n.primaryId++,n.cache[this.primaryId]=this;var r=!0,l=!1,u=void 0;try{for(var c,f=this.setting.events[Symbol.iterator]();!(r=(c=f.next()).done);r=!0){var d=c.value;this.on(d,this.setting.events[d].bind(this))}}catch(t){l=!0,u=t}finally{try{!r&&f.return&&f.return()}finally{if(l)throw u}}this._baseFlyoutConstructor(e)}return h(n,[{key:"_baseFlyoutConstructor",value:function(e){this.element=e,this.alone=this.setting.alone,this._originalHTML=e.html(),this.element.addClass("flyout").css({position:"absolute"}),this.setting.stop&&this.element.click(function(t){t.stopPropagation()}),this.setting.anchor&&(this._anchor=this.setting.anchor),this.element.addClass(this.setting.classStyle),this._placement=this.setting.placement,this._alignment=this.setting.alignment,this.setting.arrow&&(this._arrow=t('<span class="flyout-arrow"></span>'),this.element.append(this._arrow)),this.emit("mounted")}},{key:"arrow",value:function(){this._arrow=t('<span class="flyout-arrow"></span>'),this.element.append(this._arrow)}},{key:"show",value:function(t,e,i,n){this._baseFlyoutShow(t,e,i,!!n)}},{key:"hide",value:function(t){this._documentBind(!0),this._baseFlyoutHide(t)}},{key:"position",value:function(){var t=this;if(!this._isHide)return this._getTopLeft(),this.setting.arrow&&this._arrowPostion(),this.element.animate(this._endPosition,{easing:this.setting.easing,duration:this.setting.showDuration,complete:function(){t._isHide=!1}}),this}},{key:"lastAnchor",value:function(){return this._currentAnchor}},{key:"_createStayTimer",value:function(){var t=this;this.setting.stayTime&&(this._clearStay(),this._stayTimer=e.delay(function(){t.hide()},this.setting.stayTime+this.setting.showDuration))}},{key:"_clearStay",value:function(){clearTimeout(this._stayTimer),this._stayTimer=null}},{key:"_documentBind",value:function(t){var i=this,n=this;!1!==this.setting.clickDocumentHide&&(t&&this._unbindDocument?(this._unbindDocument(),this._unbindDocument=null):this._unbindDocument||(this._unbindDocument=e.documentClick(this.element,function(){!0===i.setting.clickDocumentHide?i.hide():"function"==typeof n.setting.clickDocumentHide&&i.setting.clickDocumentHide.call(n)})))}},{key:"destroy",value:function(){var t=this.primaryId;this.element.remove(),n.cache[t]=null,delete n.cache[t]}},{key:"recover",value:function(){this.element.html(this._originalHTML)}},{key:"_arrowPostion",value:function(){var t=this.element.find("span.flyout-arrow").attr("class","flyout-arrow");t.css({left:"",right:""});var e=void 0;switch(this._where.at){case"top":e="bottom";break;case"bottom":e="top";break;case"left":e="right";break;case"right":e="left"}var i=0;this._currentAnchorBox.width<=30&&(i=this._currentAnchorBox.width/2),"right"===this._currentAlignment?this._startPosition.left+=i:"left"===this._currentAlignment&&(this._startPosition.left-=i+9),t.addClass(e+" "+e+"-"+this._currentAlignment)}},{key:"_baseFlyoutShow",value:function(e,i,s,o){var h=this,r=this,a=this.element,l=!1;e?e.jquery||(e=t(e)):e=this._anchor,i||(i=this._placement),s||(s=this._alignment),e&&(this._currentAnchor&&this._currentAnchor[0]===e[0]&&(l=!0),this._currentAnchor=e,this._currentPlacement=i,this._currentAlignment=s,n.currentShowFlyout=this,e&&this._getTopLeft(o),this.alone||this._hideAllVisibleFlyout(),l&&this.setting.sameAnchorHide&&!this._isHide?this.hide():(!l||l&&!this.setting.sameAnchorHide||l&&this.setting.sameAnchorHide&&this._isHide)&&(this._documentBind(!0),this._createStayTimer(),this.setting.arrow&&r._arrowPostion(),a.show().css(this._startPosition).stop().animate(this._endPosition,{easing:this.setting.easing,duration:this.setting.showDuration,complete:function(){h._isHide=!1,h._documentBind(),h.emit("shown")}}),this.emit("show")))}},{key:"_baseFlyoutHide",value:function(t){this._clearStay();var e=this,i={opacity:0},n=this.setting.hideOffset;switch(this._where.at){case"bottom":i.top=this.element.offset().top+n;break;case"top":i.top=this.element.offset().top-n;break;case"left":i.left=this.element.offset().left-n;break;case"right":i.left=this.element.offset().left+n}!0===t?e._hideElement():this.element.stop().animate(i,{easing:this.setting.easing,duration:160,complete:function(){e._hideElement()}}),this.emit("hide")}},{key:"_hideElement",value:function(){this.element.hide(),this._isHide=!0,this.emit("hidden"),this.setting.destroy&&this.destroy()}},{key:"_hideAllVisibleFlyout",value:function(){var e=this.primaryId;t.each(n.cache,function(t,i){!i||e===t||i._isHide||i.alone||i.hide()})}},{key:"_getTopLeft",value:function(t){var e=this._currentAnchor,i=this._currentAnchorBox={left:e.offset().left,right:e.offset().left+e.outerWidth(),top:e.offset().top,bottom:e.offset().top+e.outerHeight(),width:e.outerWidth(),height:e.outerHeight()},n={width:this.element.outerWidth(),height:this.element.outerHeight()};switch(this._currentScrollTop=r.scrollTop(),this._startPosition={opacity:0},this._endPosition={opacity:1},this._currentPlacement){case"top":this._where.at="top",this._fitTop(i,n)||t||(this._fitBottom(i,n),this._where.at="bottom"),this._alignHorizontally(i,n);break;case"bottom":this._where.at="bottom",this._fitBottom(i,n)||t||(this._fitTop(i,n),this._where.at="top"),this._alignHorizontally(i,n);break;case"left":this._where.at="left",this._fitLeft(i,n)||t||(this._fitRight(i,n),this._where.at="right"),this._alignVertically(i,n);break;case"right":this._where.at="right",this._fitRight(i,n)||t||(this._fitLeft(i,n),this._where.at="left"),this._alignVertically(i,n)}}},{key:"_fitTop",value:function(t,e){return this._nextTop=t.top-e.height,this._nextAnimTop=this._nextTop-this.setting.showOffset,this._nextTop>=0&&this._nextAnimTop>this._currentScrollTop&&this._nextAnimTop+e.height<t.top}},{key:"_fitBottom",value:function(t,e){return this._nextTop=t.bottom,this._nextAnimTop=t.bottom+this.setting.showOffset,this._nextTop>=0&&this._nextAnimTop-this._currentScrollTop+e.height<r.height()}},{key:"_fitLeft",value:function(t,e){return this._nextLeft=t.left-e.width+this.setting.showOffset,this._nextAnimLeft=this._nextLeft-2*this.setting.showOffset,this._nextLeft>=0&&this._nextLeft+e.width<r.width()}},{key:"_fitRight",value:function(t,e){return this._nextLeft=t.right-this.setting.showOffset,this._nextAnimLeft=this._nextLeft+2*this.setting.showOffset,this._nextLeft>=0&&this._nextLeft+e.width<r.width()}},{key:"_fitAlignLeft",value:function(t,e){return this._nextLeft=t.left,t.left+e.width<r.width()}},{key:"_fitAlignRight",value:function(t,e){return this._nextLeft=t.right-e.width,t.right>e.width}},{key:"_alignVertically",value:function(t,e){"center"===this._currentAlignment?this._nextTop=t.top+t.height/2-e.height/2:"top"===this._currentAlignment?this._nextTop=t.top:"bottom"===this._currentAlignment&&(this._nextTop=t.bottom-e.height),this._startPosition.top=this._nextTop,this._startPosition.left=this._nextLeft,this._endPosition.left=this._nextAnimLeft}},{key:"_alignHorizontally",value:function(t,e){var i=r.width();"center"===this._currentAlignment&&(this._nextLeft=t.left+t.width/2-e.width/2,this._nextLeft+e.width>i?this._currentAlignment="right":this._nextLeft<0&&(this._currentAlignment="left")),"left"!==this._currentAlignment||this._fitAlignLeft(t,e)?"right"!==this._currentAlignment||this._fitAlignRight(t,e)||(this._fitAlignLeft(t,e),this._currentAlignment="left"):(this._fitAlignRight(t,e),this._currentAlignment="right"),this._startPosition.left=this._nextLeft,this._startPosition.top=this._nextTop,this._endPosition.top=this._nextAnimTop}}],[{key:"hideAllFlyout",value:function(){t(".flyout:visible").each(function(){var e=t(this),i=e.data("flyout");i&&e.is(":visible")&&i.hide()})}},{key:"template",get:function(){return{base:{element:'<div class="flyout box"><div class="mod"><div class="bd"></div><div class="ft"></div></div></div>'}}}}]),n}();return l.primaryId=0,l.cache={},l.currentShowFlyout=null,l.install=n,l});
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery'), require('helper.js'), require('minivents')) :
+  typeof define === 'function' && define.amd ? define(['jquery', 'helper.js', 'minivents'], factory) :
+  (global.Flyout = factory(global.$,global.helper,global.Events));
+}(this, (function ($,helper_js,Events) { 'use strict';
+
+$ = 'default' in $ ? $['default'] : $;
+Events = 'default' in Events ? Events['default'] : Events;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var $window = $(window);
+var $body = $(document.body);
+
+var Flyout$1 = function () {
+  function Flyout(element, options) {
+    _classCallCheck(this, Flyout);
+
+    Events(this);
+
+    this._anchor = null;
+    this._where = {};
+    this._isHide = true;
+    this._currentAnchor = null;
+    this._currentAnchorBox = {};
+    this._unbindDocument = null;
+
+    this.setting = Object.assign({
+      destroy: false,
+
+      alone: false,
+
+      clickDocumentHide: true,
+
+      sameAnchorHide: true,
+
+      hideDirect: 'default',
+
+      stayTime: 0,
+
+      anchorStay: false,
+
+      hideOffset: 10,
+
+      showOffset: 10,
+
+      showDuration: 150,
+      easing: 'swing',
+      classStyle: '',
+      alignment: 'center',
+      placement: 'top',
+      arrow: true,
+      stop: false
+    }, options);
+
+    var flyoutModel = void 0;
+
+    this.emit('created');
+
+    if (typeof element === 'string') {
+      flyoutModel = Flyout.template[element];
+      if (flyoutModel) {
+        element = $(flyoutModel.element);
+        this.setting = Object.assign({}, flyoutModel.options, options);
+      } else {
+        element = $(element);
+      }
+      $body.append(element);
+    } else {
+      element = $(element);
+    }
+
+    if (element.attr('id') && !document.getElementById(element.attr('id'))) {
+      $body.append(element);
+    }
+
+    if (element.data('flyout')) {
+      return element.data('flyout');
+    }
+
+    element.data('flyout', this);
+
+    this.primaryId = Flyout.primaryId++;
+
+    Flyout.cache[this.primaryId] = this;
+
+    this._baseFlyoutConstructor(element);
+  }
+
+  _createClass(Flyout, [{
+    key: '_baseFlyoutConstructor',
+    value: function _baseFlyoutConstructor(element) {
+      this.element = element;
+
+      this.alone = this.setting.alone;
+
+      this._originalHTML = element.html();
+
+      this.element.addClass('flyout').css({
+        position: 'absolute'
+      });
+
+      if (this.setting.stop) {
+        this.element.click(function (e) {
+          e.stopPropagation();
+        });
+      }
+      if (this.setting.anchor) {
+        this._anchor = this.setting.anchor;
+      }
+      this.element.addClass(this.setting.classStyle);
+
+      this._placement = this.setting.placement;
+
+      this._alignment = this.setting.alignment;
+
+      if (this.setting.arrow) {
+        this._arrow = $('<span class="flyout-arrow"></span>');
+        this.element.append(this._arrow);
+      }
+
+      this.emit('mounted');
+    }
+  }, {
+    key: 'arrow',
+    value: function arrow() {
+      this._arrow = $('<span class="flyout-arrow"></span>');
+      this.element.append(this._arrow);
+    }
+  }, {
+    key: 'show',
+    value: function show(anchor, placement, alignment, fixed) {
+      this._baseFlyoutShow(anchor, placement, alignment, !!fixed);
+    }
+  }, {
+    key: 'hide',
+    value: function hide(immediately) {
+      this._documentBind(true);
+      this._baseFlyoutHide(immediately);
+    }
+  }, {
+    key: 'position',
+    value: function position() {
+      var self = this;
+      if (this._isHide) {
+        return;
+      }
+      this._getTopLeft();
+      this.setting.arrow && this._arrowPostion();
+      this.element.animate(this._endPosition, {
+        easing: this.setting.easing,
+        duration: this.setting.showDuration,
+        complete: function complete() {
+          self._isHide = false;
+        }
+      });
+      return this;
+    }
+  }, {
+    key: 'lastAnchor',
+    value: function lastAnchor() {
+      return this._currentAnchor;
+    }
+  }, {
+    key: '_createStayTimer',
+    value: function _createStayTimer() {
+      var _this = this;
+
+      if (this.setting.stayTime) {
+        this._clearStay();
+        this._stayTimer = helper_js.delay(function () {
+          _this.hide();
+        }, this.setting.stayTime + this.setting.showDuration);
+      }
+    }
+  }, {
+    key: '_clearStay',
+    value: function _clearStay() {
+      clearTimeout(this._stayTimer);
+      this._stayTimer = null;
+    }
+  }, {
+    key: '_documentBind',
+    value: function _documentBind(unbind) {
+      var _this2 = this;
+
+      var self = this;
+      if (this.setting.clickDocumentHide === false) {
+        return;
+      }
+      if (unbind && this._unbindDocument) {
+        this._unbindDocument();
+        this._unbindDocument = null;
+      } else if (!this._unbindDocument) {
+        this._unbindDocument = helper_js.documentClick(this.element, function () {
+          if (_this2.setting.clickDocumentHide === true) {
+            _this2.hide();
+          } else if (typeof self.setting.clickDocumentHide === 'function') {
+            _this2.setting.clickDocumentHide.call(self);
+          }
+        });
+      }
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy() {
+      var id = this.primaryId;
+      this.element.remove();
+      Flyout.cache[id] = null;
+      delete Flyout.cache[id];
+    }
+  }, {
+    key: 'recover',
+    value: function recover() {
+      this.element.html(this._originalHTML);
+    }
+  }, {
+    key: '_arrowPostion',
+    value: function _arrowPostion() {
+      var arrow = this.element.find('span.flyout-arrow').attr('class', 'flyout-arrow');
+      arrow.css({
+        left: '',
+        right: ''
+      });
+
+      var pos = void 0;
+      switch (this._where.at) {
+        case 'top':
+          pos = 'bottom';
+          break;
+        case 'bottom':
+          pos = 'top';
+          break;
+        case 'left':
+          pos = 'right';
+          break;
+        case 'right':
+          pos = 'left';
+          break;
+      }
+
+      var offset = 0;
+
+      if (this._currentAnchorBox.width <= 30) {
+        offset = this._currentAnchorBox.width / 2;
+      }
+
+      if (this._currentAlignment === 'right') {
+        this._startPosition.left += offset;
+      } else if (this._currentAlignment === 'left') {
+        this._startPosition.left -= offset + 9;
+      }
+
+      arrow.addClass(pos + ' ' + pos + '-' + this._currentAlignment);
+    }
+  }, {
+    key: '_baseFlyoutShow',
+    value: function _baseFlyoutShow(anchor, placement, alignment, fixed) {
+      var _this3 = this;
+
+      var self = this;
+      var element = this.element;
+      var sameAnchor = false;
+
+      if (!anchor) {
+        anchor = this._anchor;
+      } else if (!anchor.jquery) {
+        anchor = $(anchor);
+      }
+
+      if (!placement) {
+        placement = this._placement;
+      }
+
+      if (!alignment) {
+        alignment = this._alignment;
+      }
+
+      if (!anchor) {
+        return;
+      } else {
+        if (this._currentAnchor && this._currentAnchor[0] === anchor[0]) {
+          sameAnchor = true;
+        }
+        this._currentAnchor = anchor;
+        this._currentPlacement = placement;
+        this._currentAlignment = alignment;
+      }
+
+      Flyout.currentShowFlyout = this;
+
+      if (anchor) {
+        this._getTopLeft(fixed);
+      }
+
+      if (!this.alone) {
+        this._hideAllVisibleFlyout();
+      }
+
+      if (sameAnchor && this.setting.sameAnchorHide && !this._isHide) {
+        this.hide();
+      } else if (!sameAnchor || sameAnchor && !this.setting.sameAnchorHide || sameAnchor && this.setting.sameAnchorHide && this._isHide) {
+        this._documentBind(true);
+
+        this._createStayTimer();
+        this.setting.arrow && self._arrowPostion();
+
+        element.show().css(this._startPosition).stop().animate(this._endPosition, {
+          easing: this.setting.easing,
+          duration: this.setting.showDuration,
+          complete: function complete() {
+            _this3._isHide = false;
+            _this3._documentBind();
+            _this3.emit('shown');
+          }
+        });
+
+        this.emit('show');
+      }
+    }
+  }, {
+    key: '_baseFlyoutHide',
+    value: function _baseFlyoutHide(immediately) {
+      this._clearStay();
+
+      var self = this;
+      var _hidePosition = { opacity: 0 };
+      var hideOffset = this.setting.hideOffset;
+      switch (this._where.at) {
+        case 'bottom':
+          _hidePosition.top = this.element.offset().top + hideOffset;
+          break;
+        case 'top':
+          _hidePosition.top = this.element.offset().top - hideOffset;
+          break;
+        case 'left':
+          _hidePosition.left = this.element.offset().left - hideOffset;
+          break;
+        case 'right':
+          _hidePosition.left = this.element.offset().left + hideOffset;
+          break;
+        default:
+          break;
+      }
+
+      if (immediately === true) {
+        self._hideElement();
+      } else {
+        this.element.stop().animate(_hidePosition, {
+          easing: this.setting.easing,
+          duration: 160,
+          complete: function complete() {
+            self._hideElement();
+          }
+        });
+      }
+
+      this.emit('hide');
+    }
+  }, {
+    key: '_hideElement',
+    value: function _hideElement() {
+      this.element.hide();
+      this._isHide = true;
+      this.emit('hidden');
+      if (this.setting.destroy) {
+        this.destroy();
+      }
+    }
+  }, {
+    key: '_hideAllVisibleFlyout',
+    value: function _hideAllVisibleFlyout() {
+      var currentId = this.primaryId;
+      $.each(Flyout.cache, function (id, flyout) {
+        if (flyout && currentId !== id && !flyout._isHide && !flyout.alone) {
+          flyout.hide();
+        }
+      });
+    }
+  }, {
+    key: '_getTopLeft',
+    value: function _getTopLeft(fixed) {
+      var currentAnchor = this._currentAnchor;
+      var anchor = this._currentAnchorBox = {
+        left: currentAnchor.offset().left,
+        right: currentAnchor.offset().left + currentAnchor.outerWidth(),
+        top: currentAnchor.offset().top,
+        bottom: currentAnchor.offset().top + currentAnchor.outerHeight(),
+        width: currentAnchor.outerWidth(),
+        height: currentAnchor.outerHeight()
+      };
+      var element = {
+        width: this.element.outerWidth(),
+        height: this.element.outerHeight()
+      };
+
+      this._currentScrollTop = $window.scrollTop();
+      this._startPosition = { opacity: 0 };
+      this._endPosition = { opacity: 1 };
+
+      switch (this._currentPlacement) {
+        case 'top':
+          this._where.at = 'top';
+          if (!this._fitTop(anchor, element) && !fixed) {
+            this._fitBottom(anchor, element);
+            this._where.at = 'bottom';
+          }
+          this._alignHorizontally(anchor, element);
+          break;
+        case 'bottom':
+          this._where.at = 'bottom';
+          if (!this._fitBottom(anchor, element) && !fixed) {
+            this._fitTop(anchor, element);
+            this._where.at = 'top';
+          }
+          this._alignHorizontally(anchor, element);
+          break;
+        case 'left':
+          this._where.at = 'left';
+          if (!this._fitLeft(anchor, element) && !fixed) {
+            this._fitRight(anchor, element);
+            this._where.at = 'right';
+          }
+          this._alignVertically(anchor, element);
+          break;
+        case 'right':
+          this._where.at = 'right';
+          if (!this._fitRight(anchor, element) && !fixed) {
+            this._fitLeft(anchor, element);
+            this._where.at = 'left';
+          }
+          this._alignVertically(anchor, element);
+          break;
+        case 'auto':
+          break;
+      }
+    }
+  }, {
+    key: '_fitTop',
+    value: function _fitTop(anchorDimension, flyoutDimension) {
+      this._nextTop = anchorDimension.top - flyoutDimension.height;
+      this._nextAnimTop = this._nextTop - this.setting.showOffset;
+      return this._nextTop >= 0 && this._nextAnimTop > this._currentScrollTop && this._nextAnimTop + flyoutDimension.height < anchorDimension.top;
+    }
+  }, {
+    key: '_fitBottom',
+    value: function _fitBottom(anchorDimension, flyoutDimension) {
+      this._nextTop = anchorDimension.bottom;
+      this._nextAnimTop = anchorDimension.bottom + this.setting.showOffset;
+      return this._nextTop >= 0 && this._nextAnimTop - this._currentScrollTop + flyoutDimension.height < $window.height();
+    }
+  }, {
+    key: '_fitLeft',
+    value: function _fitLeft(anchorDimension, flyoutDimension) {
+      this._nextLeft = anchorDimension.left - flyoutDimension.width + this.setting.showOffset;
+      this._nextAnimLeft = this._nextLeft - this.setting.showOffset * 2;
+      return this._nextLeft >= 0 && this._nextLeft + flyoutDimension.width < $window.width();
+    }
+  }, {
+    key: '_fitRight',
+    value: function _fitRight(anchorDimension, flyoutDimension) {
+      this._nextLeft = anchorDimension.right - this.setting.showOffset;
+      this._nextAnimLeft = this._nextLeft + this.setting.showOffset * 2;
+      return this._nextLeft >= 0 && this._nextLeft + flyoutDimension.width < $window.width();
+    }
+  }, {
+    key: '_fitAlignLeft',
+    value: function _fitAlignLeft(anchorDimension, flyoutDimension) {
+      this._nextLeft = anchorDimension.left;
+      return anchorDimension.left + flyoutDimension.width < $window.width();
+    }
+  }, {
+    key: '_fitAlignRight',
+    value: function _fitAlignRight(anchorDimension, flyoutDimension) {
+      this._nextLeft = anchorDimension.right - flyoutDimension.width;
+      return anchorDimension.right > flyoutDimension.width;
+    }
+  }, {
+    key: '_alignVertically',
+    value: function _alignVertically(anchorDimension, flyoutDimension) {
+      if (this._currentAlignment === 'center') {
+        this._nextTop = anchorDimension.top + anchorDimension.height / 2 - flyoutDimension.height / 2;
+      } else if (this._currentAlignment === 'top') {
+        this._nextTop = anchorDimension.top;
+      } else if (this._currentAlignment === 'bottom') {
+        this._nextTop = anchorDimension.bottom - flyoutDimension.height;
+      }
+
+      this._startPosition.top = this._nextTop;
+      this._startPosition.left = this._nextLeft;
+      this._endPosition.left = this._nextAnimLeft;
+    }
+  }, {
+    key: '_alignHorizontally',
+    value: function _alignHorizontally(anchorDimension, flyoutDimension) {
+      var width = $window.width();
+
+      if (this._currentAlignment === 'center') {
+        this._nextLeft = anchorDimension.left + anchorDimension.width / 2 - flyoutDimension.width / 2;
+
+        if (this._nextLeft + flyoutDimension.width > width) {
+          this._currentAlignment = 'right';
+        } else if (this._nextLeft < 0) {
+          this._currentAlignment = 'left';
+        }
+      }
+
+      if (this._currentAlignment === 'left' && !this._fitAlignLeft(anchorDimension, flyoutDimension)) {
+        this._fitAlignRight(anchorDimension, flyoutDimension);
+        this._currentAlignment = 'right';
+      } else if (this._currentAlignment === 'right' && !this._fitAlignRight(anchorDimension, flyoutDimension)) {
+        this._fitAlignLeft(anchorDimension, flyoutDimension);
+        this._currentAlignment = 'left';
+      }
+
+      this._startPosition.left = this._nextLeft;
+      this._startPosition.top = this._nextTop;
+      this._endPosition.top = this._nextAnimTop;
+    }
+  }], [{
+    key: 'hideAllFlyout',
+    value: function hideAllFlyout() {
+      $('.flyout:visible').each(function () {
+        var $this = $(this);
+        var flyoutControl = $this.data('flyout');
+        if (flyoutControl && $this.is(':visible')) {
+          flyoutControl.hide();
+        }
+      });
+    }
+  }, {
+    key: 'template',
+    get: function get() {
+      return {
+        base: {
+          element: '<div class="flyout box"><div class="mod"><div class="bd"></div><div class="ft"></div></div></div>'
+        }
+      };
+    }
+  }]);
+
+  return Flyout;
+}();
+
+Flyout$1.primaryId = 0;
+Flyout$1.cache = {};
+
+Flyout$1.currentShowFlyout = null;
+
+var VueFlyout = {
+  name: 'FlyoutComponent',
+  template: '<div class="flyout"><slot></slot></div>',
+  props: {
+    options: Object,
+    outside: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data: function data() {
+    return {
+      isShow: false
+    };
+  },
+  created: function created() {
+    this.flyout = null;
+  },
+  mounted: function mounted() {
+    if (this.outside) {
+      document.body.appendChild(this.$el);
+    }
+  },
+  destroyed: function destroyed() {
+    document.body.removeChild(this.$el);
+    this.flyout && this.flyout.destroy();
+  },
+
+  methods: {
+    show: function show(target) {
+      var _this = this;
+
+      var placement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'bottom';
+      var alignment = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'left';
+
+      if (!this.flyout) {
+        this.flyout = new Flyout$1(this.$el, this.options);
+        this.flyout.on('show', function () {
+          _this.$emit('show');
+        });
+        this.flyout.on('hide', function () {
+          _this.$emit('hide');
+        });
+        this.flyout.on('shown', function () {
+          _this.$emit('shown');
+        });
+        this.flyout.on('hidden', function () {
+          _this.$emit('hidden');
+        });
+        this.flyout.on('created', function () {
+          _this.$emit('created');
+        });
+      }
+      this.flyout.show(target, placement, alignment);
+      return this;
+    },
+    hide: function hide() {
+      this.flyout.hide();
+      return this;
+    },
+    position: function position() {
+      this.flyout.position();
+      return this;
+    }
+  }
+};
+
+function install(Vue) {
+  if (install.installed) return;
+  install.installed = true;
+
+  Vue.component('flyout', VueFlyout);
+}
+
+Flyout$1.install = install;
+Flyout$1.version = '__VERSION__';
+
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(Flyout$1);
+}
+
+return Flyout$1;
+
+})));

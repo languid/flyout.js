@@ -1,4 +1,4 @@
-import Flyout from '../index'
+import Flyout from '../flyout'
 
 export default {
   name: 'FlyoutComponent',
@@ -30,28 +30,22 @@ export default {
   methods: {
     show (target, placement = 'bottom', alignment = 'left') {
       if (!this.flyout) {
-        this.flyout = new Flyout(this.$el, Object.assign({}, this.options, {
-          events: {
-            show: () => {
-              this.$emit('show')
-            },
-            hide: () => {
-              this.$emit('hide')
-            },
-            shown: () => {
-              this.$emit('shown')
-            },
-            hidden: () => {
-              this.$emit('hidden')
-            },
-            created: () => {
-              this.$emit('created')
-            },
-            mounted: () => {
-              this.$emit('mounted')
-            }
-          }
-        }))
+        this.flyout = new Flyout(this.$el, this.options)
+        this.flyout.on('show', () => {
+          this.$emit('show')
+        })
+        this.flyout.on('hide', () => {
+          this.$emit('hide')
+        })
+        this.flyout.on('shown', () => {
+          this.$emit('shown')
+        })
+        this.flyout.on('hidden', () => {
+          this.$emit('hidden')
+        })
+        this.flyout.on('created', () => {
+          this.$emit('created')
+        })
       }
       this.flyout.show(target, placement, alignment)
       return this
