@@ -5,7 +5,7 @@
 
 import $ from 'jquery'
 import { noop } from 'helper.js'
-import Flyout from './'
+import Flyout from './flyout'
 
 export default function (anchor, ok: Function = noop, html: string = '') {
   const tpl = `<div class="flyout-box flyout-confirm"><p class="text"></p><div class="buttons"><button role="cancel" class="btn btn-sm btn-secondary">取消</button><button role="ok" class="btn btn-sm btn-primary">确认</button></div></div>`

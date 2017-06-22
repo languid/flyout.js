@@ -2,7 +2,7 @@
  * Created by Yinxiong on 2016/1/2.
  */
 
-import Flyout from './index'
+import Flyout from './flyout'
 import $ from 'jquery'
 
 export default function (anchor, html, options) {

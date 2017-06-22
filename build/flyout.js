@@ -1,11 +1,11 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery'), require('helper.js'), require('minivents')) :
-  typeof define === 'function' && define.amd ? define(['jquery', 'helper.js', 'minivents'], factory) :
-  (global.Flyout = factory(global.$,global.helper,global.Events));
-}(this, (function ($,helper_js,Events) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('jquery'), require('helper.js'), require('minivents')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'helper.js', 'minivents'], factory) :
+	(factory((global.Flyout = global.Flyout || {}),global.$,global.helper,global.Events));
+}(this, (function (exports,$,helper_js,Events) { 'use strict';
 
-$ = 'default' in $ ? $['default'] : $;
-Events = 'default' in Events ? Events['default'] : Events;
+$ = $ && 'default' in $ ? $['default'] : $;
+Events = Events && 'default' in Events ? Events['default'] : Events;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -623,6 +623,88 @@ function install(Vue) {
   Vue.component('flyout', VueFlyout);
 }
 
+var confirm = function (anchor) {
+  var ok = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : helper_js.noop;
+  var html = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
+  var tpl = '<div class="flyout-box flyout-confirm"><p class="text"></p><div class="buttons"><button role="cancel" class="btn btn-sm btn-secondary">\u53D6\u6D88</button><button role="ok" class="btn btn-sm btn-primary">\u786E\u8BA4</button></div></div>';
+
+  var flyout = new Flyout$1(tpl, {
+    destroy: true,
+    events: {
+      mounted: function mounted() {
+        var _this = this;
+
+        this.element.on('click', 'button[role]', function (e) {
+          var type = $(e.target).attr('role');
+          if (type === 'ok') {
+            ok.call(_this);
+          }
+          _this.hide();
+        });
+      }
+    }
+  });
+
+  var text = flyout.element.find('p.text');
+
+  if (html) {
+    text.css('width', 'auto').show().html(html);
+    if (flyout.element.outerWidth() > 300) {
+      text.width('250');
+    }
+  } else {
+    text.hide().html('');
+  }
+
+  flyout.show(anchor, 'top', 'center');
+
+  return flyout;
+};
+
+var tips = function (anchor, html, options) {
+  anchor = $(anchor);
+
+  var flyout = anchor.data('flyout');
+
+  if (flyout === null) {
+    var setting = {
+      placement: 'top',
+      alignment: 'center',
+      destroy: true,
+      stayTime: 800,
+      classStyle: 'info',
+      events: {
+        hidden: function hidden() {
+          anchor.data('flyout', null);
+        }
+      }
+    };
+
+    if (typeof options === 'string' && options.length) {
+      setting.classStyle = 'alert-' + options;
+    } else if ($.isPlainObject(options) || typeof options === 'undefined') {
+      Object.assign(setting, options);
+      if (setting.classStyle.length) {
+        setting.classStyle = 'alert-' + setting.classStyle;
+      }
+    }
+
+    flyout = new Flyout$1('<div class="flyout-tips alert"></div>', setting);
+    flyout.element.html(html).mouseenter(function () {
+      anchor.data('flyout', flyout);
+      flyout._clearStay();
+    }).mouseleave(function () {
+      anchor.data('flyout', null);
+      flyout._createStayTimer();
+    });
+    flyout.arrow();
+    flyout.show(anchor);
+  }
+
+  return flyout;
+};
+
 Flyout$1.install = install;
 Flyout$1.version = '__VERSION__';
 
@@ -630,6 +712,10 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(Flyout$1);
 }
 
-return Flyout$1;
+exports.confirm = confirm;
+exports.tips = tips;
+exports['default'] = Flyout$1;
+
+Object.defineProperty(exports, '__esModule', { value: true });
 
 })));

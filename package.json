@@ -1,13 +1,13 @@
 {
   "name": "flyout",
-  "version": "1.4.3",
+  "version": "1.4.9",
   "description": "A Flyout plugins",
   "main": "./build/flyout.js",
   "jsnext:main": "index",
   "module": "index",
   "scripts": {
     "dev": "rollup -c -w",
-    "prepublish": "rollup -c && uglifyjs build/flyout.js -c -m -o build/flyout.min.js",
+    "prepublish": "uglifyjs build/flyout.js -c -m -o build/flyout.min.js",
     "build": "npm run test && rollup -c && build:sass",
     "build:sass": "node-sass scss/flyout.scss build/flyout.css && node-sass scss/flyout.scss build/flyout.min.css --output-style compressed",
     "test": "eslint index.js src"
