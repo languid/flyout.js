@@ -23,9 +23,11 @@ export default {
       document.body.appendChild(this.$el)
     }
   },
-  destroyed () {
-    document.body.removeChild(this.$el)
-    this.flyout && this.flyout.destroy()
+  beforeDestroy () {
+    if (this.$el) {
+      document.body.removeChild(this.$el)
+      this.flyout && this.flyout.destroy()
+    }
   },
   methods: {
     show (target, placement = 'bottom', alignment = 'left') {
