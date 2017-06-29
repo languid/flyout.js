@@ -53,11 +53,11 @@ export default {
       return this
     },
     hide () {
-      this.flyout.hide()
+      this.flyout && this.flyout.hide()
       return this
     },
     position () {
-      this.flyout.position()
+        this.flyout && this.flyout.position()
       return this
     }
   }
