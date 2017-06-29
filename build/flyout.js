@@ -572,9 +572,11 @@ var VueFlyout = {
       document.body.appendChild(this.$el);
     }
   },
-  destroyed: function destroyed() {
-    document.body.removeChild(this.$el);
-    this.flyout && this.flyout.destroy();
+  beforeDestroy: function beforeDestroy() {
+    if (this.$el) {
+      document.body.removeChild(this.$el);
+      this.flyout && this.flyout.destroy();
+    }
   },
 
   methods: {
