@@ -57,7 +57,7 @@ export default {
       return this
     },
     position () {
-        this.flyout && this.flyout.position()
+      this.flyout && this.flyout.position()
       return this
     }
   }

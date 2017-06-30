@@ -608,11 +608,11 @@ var VueFlyout = {
       return this;
     },
     hide: function hide() {
-      this.flyout.hide();
+      this.flyout && this.flyout.hide();
       return this;
     },
     position: function position() {
-      this.flyout.position();
+      this.flyout && this.flyout.position();
       return this;
     }
   }
