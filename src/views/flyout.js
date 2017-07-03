@@ -30,7 +30,7 @@ export default {
     }
   },
   methods: {
-    show (target, placement = 'bottom', alignment = 'left') {
+    show (target, placement = 'bottom', alignment = 'left', fixed = false) {
       if (!this.flyout) {
         this.flyout = new Flyout(this.$el, this.options)
         this.flyout.on('show', () => {
@@ -49,7 +49,7 @@ export default {
           this.$emit('created')
         })
       }
-      this.flyout.show(target, placement, alignment)
+      this.flyout.show(target, placement, alignment, fixed)
       return this
     },
     hide () {

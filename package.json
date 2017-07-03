@@ -1,6 +1,6 @@
 {
   "name": "flyout",
-  "version": "1.4.13",
+  "version": "1.4.15",
   "description": "A Flyout plugins",
   "main": "./build/flyout.js",
   "jsnext:main": "index",
