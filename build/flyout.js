@@ -581,10 +581,12 @@ var VueFlyout = {
 
   methods: {
     show: function show(target) {
+      var placement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'bottom';
+
       var _this = this;
 
-      var placement = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'bottom';
       var alignment = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'left';
+      var fixed = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
       if (!this.flyout) {
         this.flyout = new Flyout$1(this.$el, this.options);
@@ -604,7 +606,7 @@ var VueFlyout = {
           _this.$emit('created');
         });
       }
-      this.flyout.show(target, placement, alignment);
+      this.flyout.show(target, placement, alignment, fixed);
       return this;
     },
     hide: function hide() {
