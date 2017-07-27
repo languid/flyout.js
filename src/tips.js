@@ -10,7 +10,7 @@ export default function (anchor, html, options) {
 
   let flyout = anchor.data('flyout')
 
-  if (flyout === null) {
+  if (!flyout) {
     const setting = {
       placement: 'top',
       alignment: 'center',

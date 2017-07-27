@@ -666,7 +666,7 @@ var tips = function (anchor, html, options) {
 
   var flyout = anchor.data('flyout');
 
-  if (flyout === null) {
+  if (!flyout) {
     var setting = {
       placement: 'top',
       alignment: 'center',
